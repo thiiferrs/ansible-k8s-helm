@@ -1,0 +1,7 @@
+---
+
+storageClass: gp2
+
+cluster: k8s-dev-services
+
+persistence_size: 50Gi

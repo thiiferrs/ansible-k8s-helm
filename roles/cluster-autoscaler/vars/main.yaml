@@ -1,0 +1,6 @@
+---
+#role do cluster autoscaler
+roleEksAutoscaler:
+
+#tempo que desliga o node depois que está inutilizado.
+desliga_nodes_time: 5m

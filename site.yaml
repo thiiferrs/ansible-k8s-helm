@@ -1,0 +1,47 @@
+---
+
+  - name: Install Cluster-Autoscaler
+    hosts: localhost
+    tags:
+      - autoscaler
+      - never
+      - all
+    roles: 
+      - { role: cluster-autoscaler }
+
+  - name: Install Metrics-server
+    hosts: localhost
+    tags: 
+      - metrics
+      - never
+      - all
+    roles:    
+      - { role: metrics-server }
+
+  - name: Install Traefik
+    hosts: localhost
+    tags: 
+      - traefik
+      - never
+      - all
+    roles:    
+      - { role: traefik }
+
+  - name: Install Prometheus
+    hosts: localhost
+    tags:
+      - prometheus
+      - never
+      - all
+    roles:    
+      - { role: prometheus }
+
+  - name: Install Prometheus-kube-state-metrics
+    hosts: localhost
+    tags:
+      - prometheus
+      - kube-state-metrics
+      - never
+      - all
+    roles:    
+      - { role: prometheus-k8s-metrics }

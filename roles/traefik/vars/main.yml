@@ -1,0 +1,10 @@
+---
+# vars file for traefik
+
+aws_load_balancer_name:
+load_balancer_tags:
+load_balancer_backend_protocol: TLS
+load_balancer_internal: "true"
+load_balancer_ssl_cert:
+load_balancer_ssl_ports: "443"
+load_balancer_type: nlb

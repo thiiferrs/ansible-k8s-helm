@@ -1,0 +1,48 @@
+---
+
+  - name: Add Prometheus Chart Repository
+    kubernetes.core.helm_repository:
+      name: prometheus-community
+      repo_url: "https://charts.bitnami.com/bitnami"
+
+  - name: Install prometheus helm chart
+    kubernetes.core.helm:
+      name: prometheus
+      chart_ref: prometheus-community/kube-prometheus
+      chart_version: 6.5.0
+      release_namespace: prometheus
+      update_repo_cache: true
+      create_namespace: true
+      values_files:
+        - roles/prometheus/files/prometheus_default_values.yaml
+      values:
+        global:
+          storageClass: "{{ storageClass }}"
+        operator:
+          externalLabels:
+            cluster: "{{ cluster }}"
+        prometheus:  
+          podMetadata:
+            annotations:
+              kuma.io/direct-access-services: "*"
+          persistence:
+            size: "{{ persistence_size }}"
+          additionalScrapeConfigs:
+            enabled: true
+            external:
+              name: "prometheus-config"
+              key: "prometheus.yml"
+          thanos:
+            create: true
+            service:
+              annotations:
+                service.beta.kubernetes.io/aws-load-balancer-backend-protocol: TLS
+                service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+                service.beta.kubernetes.io/aws-load-balancer-name:
+                service.beta.kubernetes.io/aws-load-balancer-type: nlb
+                service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags:
+
+  - name: Apply prometheus config
+    kubernetes.core.k8s:
+      state: present
+      src: roles/prometheus/files/prometheus-config.yaml

@@ -1,0 +1,14 @@
+---
+
+#if high_avail is true, replicas set to 3
+high_avail: true
+
+eks_cluster_name:
+
+domain_name:
+
+ambiente: dev
+
+awsRegion: sa-east-1
+
+timezone: America/Sao_Paulo

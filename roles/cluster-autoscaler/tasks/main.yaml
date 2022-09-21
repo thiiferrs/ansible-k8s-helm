@@ -1,0 +1,52 @@
+---
+
+  - name: Add cluster-autoscaler Chart Repository
+    kubernetes.core.helm_repository:
+      name: cluster-autoscaler
+      repo_url: https://kubernetes.github.io/autoscaler
+
+  - name: "Install cluster-autoscaler"
+    kubernetes.core.helm:
+      name: autoscaler
+      chart_ref: cluster-autoscaler/cluster-autoscaler
+      chart_version: 9.14.0
+      release_namespace: kube-system
+      create_namespace: true
+      update_repo_cache: true
+      values_files:
+        - roles/cluster-autoscaler/files/default_values.yaml
+      values:
+        autoDiscovery:
+          clusterName: "{{ eks_cluster_name }}"
+        awsRegion: "{{ awsRegion }}"
+        extraArgs:
+          logtostderr: true
+          stderrthreshold: info
+          v: 4
+          # write-status-configmap: true
+          # status-config-map-name: cluster-autoscaler-status
+          # leader-elect: true
+          # leader-elect-resource-lock: endpoints
+          # skip-nodes-with-local-storage: true
+          expander: least-waste
+          # scale-down-enabled: true
+          balance-similar-node-groups: true
+          # min-replica-count: 0
+          # scale-down-utilization-threshold: 0.5
+          # scale-down-non-empty-candidates-count: 30
+          # max-node-provision-time: 15m0s
+          # scan-interval: 10s
+          # scale-down-delay-after-add: 10m
+          # scale-down-delay-after-delete: 0s
+          # scale-down-delay-after-failure: 3m
+          scale-down-unneeded-time: "{{ desliga_nodes_time }}"
+          # skip-nodes-with-system-pods: false
+          # balancing-ignore-label_1: first-label-to-ignore
+          # balancing-ignore-label_2: second-label-to-ignore
+        rbac:
+          serviceAccount:
+            annotations:
+              eks.amazonaws.com/role-arn: "{{ roleEksAutoscaler }}"
+            create: true
+            name: "cluster-autoscaler"
+        replicaCount: "{{ '3' if high_avail == true else '1' }}"

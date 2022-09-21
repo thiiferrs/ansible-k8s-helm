@@ -1,0 +1,17 @@
+---
+
+  - name: Add Metrics-server Chart Repository
+    kubernetes.core.helm_repository:
+      name: metrics-server
+      repo_url: "https://kubernetes-sigs.github.io/metrics-server/"
+
+  - name: Install metrics-server chart
+    kubernetes.core.helm:
+      name: metrics-server
+      chart_ref: metrics-server/metrics-server
+      chart_version: 3.8.1
+      values:
+        replicas: "{{ '3' if high_avail == true else '1' }}"
+      release_namespace: metrics-server
+      update_repo_cache: true
+      create_namespace: true
