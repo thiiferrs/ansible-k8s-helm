@@ -2,7 +2,7 @@
 
 ---
 
-Includ tasks tools: cluster-autoscaler, metrics-server, prometheus, kube-state-metrics, traefik
+included tasks tools: cluster-autoscaler, metrics-server, prometheus, kube-state-metrics, traefik
 
 ### Requeriments:
 
@@ -16,7 +16,9 @@ Kubernetes Collection for Ansible module documentation: https://docs.ansible.com
 
 ### Use
 
-1. Define group_vars/all.yaml
-2. Run
+1. Configure AWS Cli or Secrets
+2. Define group_vars/all.yaml
+3. Run:
 ```
-ansible-playbook site.yaml -i hosts -t all
+$ ansible-playbook site.yaml -i hosts -t all
+```
